@@ -1,5 +1,10 @@
 <template>
     <v-app id="inspire">
+        <span class="pa-2">
+            <router-link :to="{name:'Login'}">
+                <v-icon >mdi-arrow-left</v-icon>
+            </router-link>
+        </span>
         <v-main>
             <v-container
                     class="fill-height"
@@ -14,6 +19,16 @@
                             sm="8"
                             md="4"
                     >
+                        <v-progress-linear
+                                v-if="loading"
+                                class="mb-5"
+                                color="blue darken-1"
+                                indeterminate
+                                reverse
+                        ></v-progress-linear>
+                        <v-alert v-if="Error.activate" type="error">
+                            {{Error.message}}
+                        </v-alert>
                         <v-card class="elevation-12">
                             <v-toolbar
                                     color="blue darken-1"
@@ -41,6 +56,12 @@
                                             type="password"
                                             v-model="User.password"
                                     ></v-text-field>
+                                    <v-select
+                                            :items="items"
+                                            prepend-icon="mdi-account-key"
+                                            v-model="User.readonly"
+                                            label="Privileges"
+                                    ></v-select>
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
@@ -62,20 +83,47 @@
         name: "Register",
         data: () => {
             return {
+                items: [
+                    {text: 'Read only', value: true},
+                    {text: 'Full access', value: false},
+                ],
                 User: {
                     username: '',
-                    password: ''
-                }
+                    password: '',
+                    readonly: true
+                },
+                Error: {
+                    activate: false,
+                    message: ''
+                },
+                loading: false
             }
         },
         methods: {
             handleSubmit() {
-
+                this.loading = true
+                this.$store
+                    .dispatch('register', {
+                        username: this.User.username.toLowerCase(),
+                        password: this.User.password,
+                        readonly: this.User.readonly
+                    })
+                    .then(() => {
+                        localStorage.setItem('success', true)
+                        this.$router.push({name: 'Login'})
+                    })
+                    .catch(({response}) => {
+                        this.loading = false
+                        this.Error.activate = true
+                        this.Error.message = response.data.message || response.data
+                    })
             }
         }
     }
 </script>
 
 <style scoped>
-
+    a {
+        text-decoration: none;
+    }
 </style>

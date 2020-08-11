@@ -23,7 +23,7 @@ router.post('/register', async (request, response) => {
     const user = new User({
         username: request.body.username,
         password: hashedPassword,
-        readonly: request.body.readonly ? request.body.readonly : true
+        readonly: request.body.readonly ? request.body.readonly : false
     })
 
     try{

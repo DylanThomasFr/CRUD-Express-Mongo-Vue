@@ -14,6 +14,19 @@
                             sm="8"
                             md="4"
                     >
+                        <v-progress-linear
+                                v-if="loading"
+                                class="mb-5"
+                                color="blue darken-1"
+                                indeterminate
+                                reverse
+                        ></v-progress-linear>
+                        <v-alert v-if="Error.activate" type="error">
+                            {{Error.message}}
+                        </v-alert>
+                        <v-alert v-if="success" type="success">
+                            Registered successfully.
+                        </v-alert>
                         <v-card class="elevation-12">
                             <v-toolbar
                                     color="blue darken-1"
@@ -48,7 +61,7 @@
                                     S'incrire
                                 </v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1 white--text" class="mr-3 mb-5" @click.prevent="handleSubmit">Login</v-btn>
+                                <v-btn color="blue darken-1 white--text" class="mr-3 mb-5" @click.prevent="login">Login</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-col>
@@ -67,12 +80,36 @@
                 User: {
                     username: '',
                     password: ''
-                }
+                },
+                Error: {
+                    activate: false,
+                    message: ''
+                },
+                loading : false,
+                success : false
             }
         },
         methods: {
-            handleSubmit() {
+            login () {
 
+                this.$store
+                    .dispatch('login', {
+                        username: this.User.username.toLowerCase(),
+                        password: this.User.password
+                    })
+                    .then(() => this.$router.push({name: 'Posts'}))
+                    .catch(({response}) => {
+                        this.loading = false
+                        this.Error.activate = true
+                        this.Error.message = response.data.message || response.data
+                    })
+
+            }
+        },
+        mounted () {
+            if(localStorage.getItem('success')){
+                this.success = true
+                localStorage.clear()
             }
         }
     }
