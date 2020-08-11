@@ -4,7 +4,8 @@ const Joi = require('@hapi/joi')
 const registerValidation = data => {
     const skeleton = Joi.object({
         username : Joi.string().required(),
-        password: Joi.string().required().min(6)
+        password: Joi.string().required().min(6),
+        readonly: Joi.boolean()
     })
     return skeleton.validate(data)
 }

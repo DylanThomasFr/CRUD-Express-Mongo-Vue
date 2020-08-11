@@ -13,7 +13,6 @@ app.use(bodyParser.json())
 // Import Routes
 const postRoute = require('./routes/posts')
 const authRoute = require('./routes/auth');
-const { populate } = require('./models/Post');
 
 app.use('/api/post', postRoute)
 app.use('/api/user', authRoute)

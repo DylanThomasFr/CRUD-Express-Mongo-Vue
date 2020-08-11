@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Post = require('../models/Post')
+const User = require('../models/User')
 const verify = require('./verifyToken')
 
 
@@ -10,25 +11,30 @@ router.get('/', verify, async (request, response) => {
         const posts = await Post.find()
         response.json(posts)
     } catch (err) {
-        response.json({message:err})
+        response.json({ message: err })
     }
 })
 
 // SUBMIT A POST
 router.post('/', verify, async (request, response) => {
-    const post = new Post({
-        userId: request.user._id,
-        title: request.body.title,
-        content: request.body.content
-    })
+    const user = await User.findOne({ _id: request.user._id })
+    if (!user.readonly) {
+        const post = new Post({
+            userId: request.user._id,
+            title: request.body.title,
+            content: request.body.content
+        })
 
-    try {
-        const savedPost = await post.save()
-        response.json(savedPost)
-    } catch (err) {
-        response.json({message:err})
+        try {
+            const savedPost = await post.save()
+            response.json(savedPost)
+        } catch (err) {
+            response.json({ message: err })
+        }
+    }else{
+        response.status(401).send({message:'You can\'t post a new post'})
     }
-    
+
 })
 
 //SPECIFIC POST 
@@ -37,30 +43,32 @@ router.get('/:postId', verify, async (request, response) => {
         const post = await Post.findById(request.params.postId)
         response.json(post)
     } catch (err) {
-        response.json({message:err})
+        response.json({ message: err })
     }
 })
 
 //DELETE A POST
 router.delete('/:postId', verify, async (request, response) => {
     try {
-        const removedPost = await Post.remove({_id: request.params.postId})
+        const removedPost = await Post.remove({ _id: request.params.postId })
         response.json(removedPost)
     } catch (err) {
-        response.json({message:err})
+        response.json({ message: err })
     }
 })
 
 //UPDATE A POST
 router.put('/:postId', verify, async (request, response) => {
     try {
-        const updatedPost = await Post.updateOne({_id: request.params.postId}, {$set: {
-            title: request.body.title,
-            content: request.body.content
-        }})
+        const updatedPost = await Post.updateOne({ _id: request.params.postId }, {
+            $set: {
+                title: request.body.title,
+                content: request.body.content
+            }
+        })
         response.json(updatedPost)
     } catch (err) {
-        response.json({message:err})
+        response.json({ message: err })
     }
 })
 

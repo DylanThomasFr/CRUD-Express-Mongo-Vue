@@ -12,6 +12,11 @@ const userSchema = Schema({
         max: 1024,
         min:6
     },
+    readonly : {
+        type: Boolean,
+        required : true,
+        default: true
+    },
     created_at:{
         type: Date,
         default: Date.now
