@@ -7,7 +7,11 @@ export default new Vuex.Store({
     state: {
         token: localStorage.getItem('access_token') || null,
     },
-    getters: {},
+    getters: {
+        isLoggedIn (state) {
+            return state.token !== null
+        }
+    },
     mutations: {
         setToken (state, token) {
             this._vm.$http.defaults.headers.common['Authorization'] = `Bearer ${  token}`
