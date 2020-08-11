@@ -62,16 +62,16 @@
     export default {
         name: "Login",
 
-        data : () => {
+        data: () => {
             return {
-                User : {
-                    username : '',
-                    password : ''
+                User: {
+                    username: '',
+                    password: ''
                 }
             }
         },
-        methods:{
-            handleSubmit(){
+        methods: {
+            handleSubmit() {
 
             }
         }
