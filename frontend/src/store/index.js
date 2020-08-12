@@ -43,6 +43,42 @@ export default new Vuex.Store({
                     context.commit('setToken', token)
                     return response
                 })
+        },
+        posts (context) {
+            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            return this._vm.$http
+                .get('post')
+                .then(response => {
+                    return response.data
+                })
+                .catch(({response}) => {
+                    return response
+                })
+        },
+        addPosts(context, post){
+            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            return this._vm.$http
+                .post('post',{
+                    title : post.title,
+                    content : post.content
+                })
+                .then(response => {
+                    return response.data
+                })
+                .catch(({response}) => {
+                    return response
+                })
+        },
+        getPost(context, id){
+            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            return this._vm.$http
+                .get('post/'+id)
+                .then(response => {
+                    return response.data
+                })
+                .catch(({response}) => {
+                    return response
+                })
         }
     },
 })

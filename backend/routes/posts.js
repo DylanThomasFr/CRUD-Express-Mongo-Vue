@@ -3,6 +3,7 @@ const router = express.Router()
 const Post = require('../models/Post')
 const User = require('../models/User')
 const verify = require('./verifyToken')
+const { addPostValidation, updatePostValidation } = require('../validation/postValidation')
 
 
 // GET ALL THE POSTS
@@ -17,10 +18,14 @@ router.get('/', verify, async (request, response) => {
 
 // SUBMIT A POST
 router.post('/', verify, async (request, response) => {
+
+    // Validation of datas
+    const { error } = addPostValidation(request.body)
+    if (error) return response.status(422).send(error.details[0].message)
+
     const user = await User.findOne({ _id: request.user._id })
     if (!user.readonly) {
         const post = new Post({
-            userId: request.user._id,
             title: request.body.title,
             content: request.body.content
         })
@@ -31,8 +36,8 @@ router.post('/', verify, async (request, response) => {
         } catch (err) {
             response.json({ message: err })
         }
-    }else{
-        response.status(401).send({message:'You can\'t post a new post'})
+    } else {
+        response.status(401).send({ message: 'You can\'t post a new post' })
     }
 
 })
@@ -53,17 +58,22 @@ router.delete('/:postId', verify, async (request, response) => {
     if (!user.readonly) {
         try {
             const removedPost = await Post.remove({ _id: request.params.postId })
-            response.status(200).json({message: 'Post removed successfully'})
+            response.status(200).json({ message: 'Post removed successfully' })
         } catch (err) {
             response.status(400).json({ message: err })
         }
-    }else{
-        response.status(401).send({message:'You can\'t delete a post'})
+    } else {
+        response.status(401).send({ message: 'You can\'t delete a post' })
     }
 })
 
 //UPDATE A POST
 router.put('/:postId', verify, async (request, response) => {
+
+    // Validation of datas
+    const { error } = updatePostValidation(request.body)
+    if (error) return response.status(422).send(error.details[0].message)
+
     const user = await User.findOne({ _id: request.user._id })
     if (!user.readonly) {
         try {
@@ -73,12 +83,12 @@ router.put('/:postId', verify, async (request, response) => {
                     content: request.body.content
                 }
             })
-            response.status(200).json({message: 'Post removed successfully'})
+            response.status(200).json({ message: 'Post removed successfully' })
         } catch (err) {
             response.status(400).json({ message: err })
         }
-    }else{
-        response.status(401).send({message:'You can\'t update a post'})
+    } else {
+        response.status(401).send({ message: 'You can\'t update a post' })
     }
 })
 
