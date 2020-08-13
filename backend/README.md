@@ -14,7 +14,7 @@
 
 ```json
 {
-	"username" : "example",
+    "username" : "example",
     "password" : "password"
 }
 ```
@@ -23,7 +23,7 @@
 
 ````json
 {
-	"access_token" : "MY_SECRET_TOKEN",
+    "access_token" : "MY_SECRET_TOKEN",
 }
 ````
 
@@ -33,7 +33,7 @@
 
 ```json
 {
-	"username" : "example",
+    "username" : "example",
     "password" : "password",
     "readonly" : true
 }
@@ -43,7 +43,7 @@
 
 ```json
 {
-	"user" : "userid"
+    "user" : "userid"
 }
 ```
 
@@ -57,7 +57,7 @@
 
 ```json
 {
-	"readonly" : true
+   "readonly" : true
 }
 ```
 
@@ -122,7 +122,7 @@
 
 ```json
 {
-	"_id" : "id",
+    "_id" : "id",
     "title" : "Post title",
     "content" : "Lorem ipsum dolor ipset",
     "created_at" : "2018/01/20"
@@ -137,7 +137,7 @@
 
 ```json
 {
-	"message" : "Post removed successfully"
+    "message" : "Post removed successfully"
 }
 ```
 
@@ -149,7 +149,7 @@
 
 ```json
 {
-	"message" : "Post updated successfully"
+    "message" : "Post updated successfully"
 }
 ```
 
