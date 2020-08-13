@@ -6,7 +6,9 @@
 
 ##  Authentication routes
 
-** For each routes, you have to put the prefix /user
+**For each routes, you have to put the prefix /user**
+
+
 
 ### To login (POST) : /login
 
