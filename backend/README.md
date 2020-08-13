@@ -65,13 +65,13 @@
 
 ## Post routes
 
-**For each route, you need to be authenticated and put the prefix /post **
+**For each route, you need to be authenticated and put the prefix /post**
 
 
 
 ### Get all posts (GET) : /
 
-**Response : **
+**Response :**
 
 ```json
 [
@@ -103,7 +103,7 @@
 
 
 
- **Response : **
+ **Response :**
 
 ```json
 {
@@ -118,7 +118,7 @@
 
 ### Get specific post (GET) : /:postId
 
- **Response : **
+ **Response :**
 
 ```json
 {
