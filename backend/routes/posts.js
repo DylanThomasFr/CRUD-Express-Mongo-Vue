@@ -83,7 +83,8 @@ router.put('/:postId', verify, async (request, response) => {
                     content: request.body.content
                 }
             })
-            response.status(200).json({ message: 'Post removed successfully' })
+            const post = await Post.findById(request.params.postId)
+            response.status(200).json({ message: 'Post updated successfully', post })
         } catch (err) {
             response.status(400).json({ message: err })
         }

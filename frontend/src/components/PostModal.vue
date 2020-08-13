@@ -39,7 +39,7 @@
 
 <script>
     export default {
-        name: "Modal",
+        name: "PostModal",
         props: {
             dialog: Boolean,
             modalTitle: String,
@@ -57,17 +57,9 @@
         methods: {
             submitDialog() {
                 this.$emit('submitDialog', this.Modal)
-                this.reset()
             },
             closeDialog(){
                 this.$emit('closeDialog', this.Modal)
-                this.reset()
-            },
-            reset(){
-                this.Modal = {
-                    title: '',
-                    content: ''
-                }
             }
         },
         computed: {
@@ -78,6 +70,11 @@
         created() {
             this.Modal.title = this.title,
             this.Modal.content = this.content
+        },
+        watch:{
+            deleteDialog(val){
+                this.deleteDialog=!val
+            }
         }
     }
 </script>

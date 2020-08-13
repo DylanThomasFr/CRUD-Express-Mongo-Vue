@@ -8,19 +8,19 @@ export default new Vuex.Store({
         token: localStorage.getItem('access_token') || null,
     },
     getters: {
-        isLoggedIn (state) {
+        isLoggedIn(state) {
             return state.token !== null
         }
     },
     mutations: {
-        setToken (state, token) {
-            this._vm.$http.defaults.headers.common['Authorization'] = `Bearer ${  token}`
+        setToken(state, token) {
+            this._vm.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`
             localStorage.setItem('access_token', token)
             state.token = token
         },
     },
     actions: {
-        register(context,data){
+        register(context, data) {
             console.log(data.readonly)
             return this._vm.$http
                 .post('user/register', {
@@ -32,7 +32,7 @@ export default new Vuex.Store({
                     return response
                 })
         },
-        login (context, credentials) {
+        login(context, credentials) {
             return this._vm.$http
                 .post('user/login', {
                     username: credentials.username,
@@ -44,7 +44,7 @@ export default new Vuex.Store({
                     return response
                 })
         },
-        posts (context) {
+        posts(context) {
             this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
             return this._vm.$http
                 .get('post')
@@ -55,12 +55,12 @@ export default new Vuex.Store({
                     return response
                 })
         },
-        addPosts(context, post){
+        addPosts(context, post) {
             this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
             return this._vm.$http
-                .post('post',{
-                    title : post.title,
-                    content : post.content
+                .post('post', {
+                    title: post.title,
+                    content: post.content
                 })
                 .then(response => {
                     return response.data
@@ -69,10 +69,36 @@ export default new Vuex.Store({
                     return response
                 })
         },
-        getPost(context, id){
+        updatePost(context, infos) {
+            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+
+            return this._vm.$http
+                .put('post/' + infos.id, {
+                    title: infos.title,
+                    content: infos.content
+                })
+                .then(response => {
+                    return response.data
+                })
+                .catch(({response}) => {
+                    return response
+                })
+        },
+        getPost(context, id) {
             this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
             return this._vm.$http
-                .get('post/'+id)
+                .get('post/' + id)
+                .then(response => {
+                    return response.data
+                })
+                .catch(({response}) => {
+                    return response
+                })
+        },
+        deletePost(context,id){
+            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            return this._vm.$http
+                .delete('post/' + id)
                 .then(response => {
                     return response.data
                 })

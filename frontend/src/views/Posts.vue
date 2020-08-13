@@ -1,31 +1,21 @@
 <template>
     <v-app id="inspire">
-        <v-app-bar
-                app
-                color="blue darken-1"
-                dark
-        >
-            <v-toolbar-title>FDVhudset</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn class="mr-5" icon>
-                <v-icon>mdi-logout</v-icon> &nbsp;
-                Logout
-            </v-btn>
-        </v-app-bar>
+        <Navbar/>
         <v-main class="px-5 my-5">
             <v-alert v-if="Success.activate" type="success">
                 {{Success.message}}
             </v-alert>
-            <Modal
+            <PostModal
                     :key="Modal.title"
-                    :dialog="dialog"
+                    :dialog="postDialog"
                     @submitDialog="dialogSubmit"
-                    @closeDialog="dialog=!dialog"
+                    @closeDialog="postDialog=!postDialog"
                     :modalTitle="modalTitle"
                     :title="Modal.title"
                     :content="Modal.content"
             />
-            <div class="my-2">
+            <DeleteModal :active="deleteDialog" @close="deleteDialog=!deleteDialog" @delete="deletePost"/>
+            <div class="my-5">
                 <v-btn color="blue darken-1" dark large @click="openDialog('Add new post', 'ADD')"> + Add new post
                 </v-btn>
             </div>
@@ -58,7 +48,7 @@
                                     </v-list-item-title>
                                 </v-list-item>
                                 <v-list-item>
-                                    <v-list-item-title class="pointer" @click="deletePost(item.id)">Delete
+                                    <v-list-item-title class="pointer" @click="checkDelete(item.id)">Delete
                                     </v-list-item-title>
                                 </v-list-item>
                             </v-list>
@@ -67,27 +57,28 @@
                 </template>
             </v-data-table>
         </v-main>
-
-        <v-footer
-                color="blue darken-1"
-                app
-        >
-            <span class="white--text">&copy; Dylan THOMAS</span>
-        </v-footer>
+        <Footer/>
     </v-app>
 </template>
 
 <script>
-    import Modal from "../components/Modal";
+    import PostModal from "../components/PostModal";
+    import DeleteModal from "../components/DeleteModal";
+    import Footer from "../components/Footer";
+    import Navbar from "../components/Navbar";
 
     export default {
         name: "Posts",
         components: {
-            Modal
+            Navbar,
+            PostModal,
+            DeleteModal,
+            Footer
         },
         data: () => {
             return {
-                dialog: false,
+                postDialog: false,
+                deleteDialog:false,
                 modalTitle: '',
                 action: '',
                 change:false,
@@ -115,27 +106,35 @@
             }
         },
         methods: {
-            openDialog(title, action, id) {
-
+            async openDialog(title, action, id) {
                 this.postId = id ? id : 0
+
                 if(this.postId!==0){
-                    this.$store.dispatch('getPost', id)
+                    await this.$store.dispatch('getPost', id)
                         .then(response => {
                             this.Modal.title = response.title
                             this.Modal.content = response.content
                         })
                         .catch(({response}) => console.log(response))
+                }else{
+                    this.Modal = {
+                        title:'',
+                        content:''
+                    }
                 }
 
-                this.dialog = true
+                this.postDialog = true
                 this.modalTitle = title
                 this.action = action
-
-
+            },
+            checkDelete(id){
+                this.deleteDialog = true
+                this.postId = id
             },
             dialogSubmit(modal) {
-                this.dialog = false
+                this.postDialog = false
                 if (this.action === 'ADD') this.addPost(modal)
+                else if(this.action === 'UPDATE') this.updatePost(modal)
             },
             addPost(modal) {
                 this.$store.dispatch('addPosts', modal)
@@ -153,6 +152,45 @@
                             activate: true,
                             message: 'Post added successfully'
                         }
+                    })
+                    .catch(({response}) => console.log(response))
+            },
+            updatePost(modal){
+                this.$store.dispatch('updatePost', {
+                    id : this.postId,
+                    title: modal.title,
+                    content: modal.content
+                })
+                    .then(({post}) => {
+                        const date = new Date(post.created_at)
+                        const resultDate = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
+
+                        const index = this.posts.findIndex(item => item.id === post._id )
+                        this.posts[index] = {
+                            id : post._id,
+                            title : post.title,
+                            content : post.content,
+                            date : resultDate
+                        }
+                        this.change = !this.change
+                        this.Success = {
+                            activate: true,
+                            message: 'Post updated successfully'
+                        }
+                    })
+                    .catch(({response}) => console.log(response))
+            },
+            deletePost(){
+                this.$store.dispatch('deletePost', this.postId)
+                    .then(() => {
+                        const index = this.posts.findIndex(item => item.id === this.postId )
+                        this.posts.splice(index,1)
+                        this.change = !this.change
+                        this.Success = {
+                            activate: true,
+                            message: 'Post removed successfully'
+                        }
+                        this.deleteDialog=false
                     })
                     .catch(({response}) => console.log(response))
             },
