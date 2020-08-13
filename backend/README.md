@@ -75,7 +75,7 @@
 
 ```json
 [
-	{
+    {
         "_id" : "id",
         "title" : "Post title",
         "content" : "Lorem ipsum dolor ipset",
@@ -107,7 +107,7 @@
 
 ```json
 {
-	"_id" : "id",
+    "_id" : "id",
     "title" : "Post title",
     "content" : "Lorem ipsum dolor ipset",
     "created_at" : "2018/01/20"
