@@ -49,7 +49,7 @@ exports.deletePost = async (request, response) => {
     const user = await User.findOne({ _id: request.user._id })
     if (!user.readonly) {
         try {
-            const removedPost = await Post.remove({ _id: request.params.postId })
+            const removedPost = await Post.deleteOne({ _id: request.params.postId })
             response.status(200).json({ message: 'Post removed successfully' })
         } catch (err) {
             response.status(400).json({ message: err })
