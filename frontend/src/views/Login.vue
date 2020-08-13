@@ -1,5 +1,5 @@
 <template>
-    <v-app id="inspire">
+    <v-app id="inspire" >
         <v-main>
             <v-container
                     class="fill-height"
@@ -44,6 +44,7 @@
                                             prepend-icon="mdi-account"
                                             type="text"
                                             v-model="User.username"
+                                            @keyup.enter="login"
                                     ></v-text-field>
 
                                     <v-text-field
@@ -53,6 +54,7 @@
                                             prepend-icon="mdi-lock"
                                             type="password"
                                             v-model="User.password"
+                                            @keyup.enter="login"
                                     ></v-text-field>
                                 </v-form>
                             </v-card-text>
