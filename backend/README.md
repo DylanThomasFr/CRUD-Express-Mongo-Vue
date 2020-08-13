@@ -96,8 +96,8 @@
 
 ```json
 {
-	"title" : "Post title",
-	"content" : "Lorem ipsum dolor ipset"
+   "title" : "Post title",
+   "content" : "Lorem ipsum dolor ipset"
 }
 ```
 
