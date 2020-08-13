@@ -41,13 +41,13 @@ export default new Vuex.Store({
                     password: credentials.password
                 })
                 .then(response => {
-                    const token = response.data
+                    const token = 'Bearer ' + response.data.access_token
                     context.commit('setToken', token)
                     return response
                 })
         },
         getRole(context){
-            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            this._vm.$http.defaults.headers.common['Authorization'] = context.state.token
             return this._vm.$http
                 .get('user/readonly', )
                 .then(response => {
@@ -55,7 +55,7 @@ export default new Vuex.Store({
                 })
         },
         posts(context) {
-            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            this._vm.$http.defaults.headers.common['Authorization'] = context.state.token
             return this._vm.$http
                 .get('post')
                 .then(response => {
@@ -66,7 +66,7 @@ export default new Vuex.Store({
                 })
         },
         addPosts(context, post) {
-            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            this._vm.$http.defaults.headers.common['Authorization'] = context.state.token
             return this._vm.$http
                 .post('post', {
                     title: post.title,
@@ -80,7 +80,7 @@ export default new Vuex.Store({
                 })
         },
         updatePost(context, infos) {
-            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            this._vm.$http.defaults.headers.common['Authorization'] = context.state.token
 
             return this._vm.$http
                 .put('post/' + infos.id, {
@@ -95,7 +95,7 @@ export default new Vuex.Store({
                 })
         },
         getPost(context, id) {
-            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            this._vm.$http.defaults.headers.common['Authorization'] = context.state.token
             return this._vm.$http
                 .get('post/' + id)
                 .then(response => {
@@ -106,7 +106,7 @@ export default new Vuex.Store({
                 })
         },
         deletePost(context,id){
-            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            this._vm.$http.defaults.headers.common['Authorization'] = context.state.token
             return this._vm.$http
                 .delete('post/' + id)
                 .then(response => {
@@ -117,7 +117,7 @@ export default new Vuex.Store({
                 })
         },
         getDetails(context,id){
-            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            this._vm.$http.defaults.headers.common['Authorization'] = context.state.token
             return this._vm.$http
                 .get('post/' + id)
                 .then(response => {

@@ -48,7 +48,7 @@ exports.login = async (request, response) => {
 
     // Create and assign token
     const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
-    response.header('auth-token', token).status(201).send(token)
+    response.status(201).send({'access_token':token})
 }
 
 exports.getRole = async (request, response) => {

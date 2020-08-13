@@ -29,7 +29,7 @@
                     :items-per-page="nbItems"
                     class="elevation-1"
             >
-                <template v-slot:item.title="{item}" v-if="!readonly">
+                <template v-slot:item.title="{item}">
                     <td>
                         <v-btn text small @click="showDetails(item.id)">{{item.title}}</v-btn>
                     </td>
@@ -96,10 +96,6 @@
                     {text: 'Title', align: 'start', sortable: true, value: 'title'},
                     {text: 'Date', value: 'date'},
                     {text: '', value: 'action'}
-                ],
-                actions: [
-                    {title: 'Update post'},
-                    {title: 'Delete post'},
                 ],
                 Success: {
                     activate: false,
