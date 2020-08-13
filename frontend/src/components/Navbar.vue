@@ -6,7 +6,7 @@
     >
         <v-toolbar-title>FDVhudset</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn class="mr-5" icon>
+        <v-btn class="mr-5" @click="logout" icon>
             <v-icon>mdi-logout</v-icon> &nbsp;
             Logout
         </v-btn>
@@ -15,7 +15,13 @@
 
 <script>
     export default {
-        name: "Navbar"
+        name: "Navbar",
+        methods:{
+            logout(){
+                this.$store.commit('logout')
+                this.$router.push({name:'Login'})
+            }
+        }
     }
 </script>
 

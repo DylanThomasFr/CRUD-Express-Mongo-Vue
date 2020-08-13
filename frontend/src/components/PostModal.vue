@@ -68,13 +68,8 @@
             }
         },
         created() {
-            this.Modal.title = this.title,
-            this.Modal.content = this.content
-        },
-        watch:{
-            deleteDialog(val){
-                this.deleteDialog=!val
-            }
+            this.Modal.title=this.title
+            this.Modal.content=this.content
         }
     }
 </script>

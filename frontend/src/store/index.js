@@ -14,14 +14,16 @@ export default new Vuex.Store({
     },
     mutations: {
         setToken(state, token) {
-            this._vm.$http.defaults.headers.common['Authorization'] = `Bearer ${token}`
             localStorage.setItem('access_token', token)
             state.token = token
         },
+        logout(state){
+            localStorage.removeItem('access_token')
+            state.token = null
+        }
     },
     actions: {
         register(context, data) {
-            console.log(data.readonly)
             return this._vm.$http
                 .post('user/register', {
                     username: data.username,
@@ -41,6 +43,14 @@ export default new Vuex.Store({
                 .then(response => {
                     const token = response.data
                     context.commit('setToken', token)
+                    return response
+                })
+        },
+        getRole(context){
+            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            return this._vm.$http
+                .get('user/readonly', )
+                .then(response => {
                     return response
                 })
         },
@@ -99,6 +109,17 @@ export default new Vuex.Store({
             this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
             return this._vm.$http
                 .delete('post/' + id)
+                .then(response => {
+                    return response.data
+                })
+                .catch(({response}) => {
+                    return response
+                })
+        },
+        getDetails(context,id){
+            this._vm.$http.defaults.headers.common['auth-token'] = context.state.token
+            return this._vm.$http
+                .get('post/' + id)
                 .then(response => {
                     return response.data
                 })
