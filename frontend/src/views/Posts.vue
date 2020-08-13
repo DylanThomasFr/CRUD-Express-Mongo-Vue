@@ -95,7 +95,7 @@
                 headers: [
                     {text: 'Title', align: 'start', sortable: true, value: 'title'},
                     {text: 'Date', value: 'date'},
-                    {text: '', value: 'action'}
+                    {text: '', value: 'action', sortable: false}
                 ],
                 Success: {
                     activate: false,

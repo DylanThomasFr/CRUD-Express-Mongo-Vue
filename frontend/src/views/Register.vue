@@ -46,6 +46,7 @@
                                             prepend-icon="mdi-account"
                                             type="text"
                                             v-model="User.username"
+                                            @keyup.enter="register"
                                     ></v-text-field>
 
                                     <v-text-field
@@ -55,19 +56,21 @@
                                             prepend-icon="mdi-lock"
                                             type="password"
                                             v-model="User.password"
+                                            @keyup.enter="register"
                                     ></v-text-field>
                                     <v-select
                                             :items="items"
                                             prepend-icon="mdi-account-key"
                                             v-model="User.readonly"
                                             label="Privileges"
+                                            @keyup.enter="register"
                                     ></v-select>
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1 white--text" class="mr-3 mb-5"
-                                       @click.prevent="handleSubmit">S'inscrire
+                                       @click.prevent="register">S'inscrire
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
@@ -100,7 +103,7 @@
             }
         },
         methods: {
-            handleSubmit() {
+            register() {
                 this.loading = true
                 this.$store
                     .dispatch('register', {
