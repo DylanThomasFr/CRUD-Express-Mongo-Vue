@@ -27,7 +27,7 @@ exports.register = async (request, response) => {
 
     try{
         const savedUsed = await user.save()
-        response.send({user: user._id})
+        response.status(201).send({user: user._id})
     } catch (err) {
         response.status(400).send({message:err})
     }
