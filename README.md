@@ -1,11 +1,12 @@
-# FDVhudset project
+# CRUD Express Mongo Vue 2
 
 ## Initialize project
 
-First, let's initialize the backend. The command bellow will install the dependancies of the Express backend
+First, let's initialize the backend. The command bellow will install the dependancies of the Express backend. Change also the values in the .env file
 
 ``` bash
 cd backend
+cp env-example .env
 npm install
 ```
 
